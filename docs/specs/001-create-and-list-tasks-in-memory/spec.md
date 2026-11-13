@@ -26,7 +26,7 @@ As an API client, I want to list all tasks, so that I can see everything on the 
 - **AC-001.4** Given a freshly started service with no tasks created, when a client sends `GET /tasks`, then the response is `200` with an empty JSON array `[]`.
 - **AC-001.5** Given a running service, when a client sends `POST /tasks` with the title missing, not a string, empty, whitespace only, or longer than 200 characters, then the response is `422`, the body names the field `title`, and no task is added to the list.
 - **AC-001.6** Given a running service, when a client sends `POST /tasks` with a `due_date` that is not a calendar date in the form `YYYY-MM-DD` (for example `"01.12.2026"`, `"2026-02-30"` or `42`), then the response is `422`, the body names the field `due_date`, and no task is added to the list.
-- **AC-001.7** Given tasks were created, when the service restarts, then `GET /tasks` returns `200` with `[]`.
+- ~~**AC-001.7**~~ superseded by AC-002.1 on 2026-11-13: Given tasks were created, when the service restarts, then `GET /tasks` returns `200` with `[]`.
 
 ## Non-goals
 
@@ -60,3 +60,4 @@ None.
 - 2026-11-13 approved
 - 2026-11-13 building
 - 2026-11-13 done
+- 2026-11-13 AC-001.7 superseded by AC-002.1
