@@ -1,1 +1,1 @@
-"""Task domain: models and in-memory store."""
+"""Task domain: models and Postgres store."""

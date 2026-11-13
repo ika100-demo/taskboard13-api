@@ -1,36 +1,35 @@
-"""Unit tests for task models and the in-memory store."""
+"""Unit tests for task models and the database access layer."""
 
 from __future__ import annotations
 
 import pytest
 from pydantic import ValidationError
 
+from taskboard13_api.db import DatabaseUnavailableError, connect, database_conninfo
 from taskboard13_api.tasks.models import TaskCreate
-from taskboard13_api.tasks.store import TaskStore, get_task_store
-
-
-def test_new_store_is_empty() -> None:
-    assert TaskStore().list() == []
-
-
-def test_order_and_distinct_ids() -> None:
-    store = TaskStore()
-    for title in ("A", "B", "C"):
-        store.add(title, None)
-    tasks = store.list()
-    assert [t.title for t in tasks] == ["A", "B", "C"]
-    assert len({t.id for t in tasks}) == 3
-
-
-def test_list_returns_copy() -> None:
-    store = TaskStore()
-    store.add("A", None)
-    store.list().clear()
-    assert len(store.list()) == 1
+from taskboard13_api.tasks.store import get_task_store
 
 
 def test_singleton() -> None:
     assert get_task_store() is get_task_store()
+
+
+def test_database_conninfo_set(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("DATABASE_URL", "postgresql://u@h/db")
+    assert database_conninfo() == "postgresql://u@h/db"
+
+
+def test_database_conninfo_unset(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("DATABASE_URL", raising=False)
+    assert database_conninfo() == ""
+
+
+def test_connect_closed_port_has_no_password() -> None:
+    conninfo = "postgresql://user:s3cretpw@127.0.0.1:1/db"
+    with pytest.raises(DatabaseUnavailableError) as info:
+        with connect(conninfo, connect_timeout=1):
+            pass
+    assert "s3cretpw" not in str(info.value)
 
 
 def test_title_length_limits() -> None:
