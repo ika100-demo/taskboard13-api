@@ -25,7 +25,7 @@ def test_database_conninfo_unset(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_connect_closed_port_has_no_password() -> None:
-    conninfo = "postgresql://user:s3cretpw@127.0.0.1:1/db"
+    conninfo = "postgresql://user:s3cretpw@127.0.0.1:1/db"  # pragma: allowlist secret
     with pytest.raises(DatabaseUnavailableError) as info:
         with connect(conninfo, connect_timeout=1):
             pass
