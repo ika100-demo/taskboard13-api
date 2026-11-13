@@ -50,3 +50,9 @@ def test_smoke_ac_001_3_list_is_array(smoke_base_url: str) -> None:  # AC-001.3 
     response = httpx.get(smoke_base_url + "/tasks", timeout=10)
     assert response.status_code == 200
     assert isinstance(response.json(), list)
+
+
+@pytest.mark.smoke
+def test_smoke_ac_002_5_ready_reaches_database(smoke_base_url: str) -> None:  # AC-002.5 read-only
+    response = httpx.get(smoke_base_url + "/ready", timeout=10)
+    assert response.status_code == 200
