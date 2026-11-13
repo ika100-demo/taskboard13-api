@@ -30,15 +30,25 @@ def test_restart_keeps_tasks_in_order(pg_server, pg_store, install_store):  # AC
     assert [t["title"] for t in response.json()] == ["A", "B", "C"]
 
 
-def test_empty_database_needs_no_schema_step(client, pg_store):  # AC-002.2
-    listed = client.get("/tasks")
-    assert listed.status_code == 200
-    assert listed.json() == []
+def test_empty_database_needs_no_schema_step(client, pg_server, monkeypatch):  # AC-002.2
+    from taskboard13_api.tasks.store import get_task_store
 
-    created = client.post("/tasks", json={"title": "Buy milk"})
-    assert created.status_code == 201
-    assert created.json()["title"] == "Buy milk"
-    assert client.get("/tasks").json() == [created.json()]
+    pg_server.reset()
+    # Configuration path: DATABASE_URL, no dependency override, fresh cached store.
+    app.dependency_overrides.pop(get_task_store, None)
+    monkeypatch.setenv("DATABASE_URL", pg_server.url)
+    get_task_store.cache_clear()
+    try:
+        listed = client.get("/tasks")
+        assert listed.status_code == 200
+        assert listed.json() == []
+
+        created = client.post("/tasks", json={"title": "Buy milk"})
+        assert created.status_code == 201
+        assert created.json()["title"] == "Buy milk"
+        assert client.get("/tasks").json() == [created.json()]
+    finally:
+        get_task_store.cache_clear()
 
 
 def test_get_tasks_503_when_db_unreachable(client, install_store, unreachable_url):  # AC-002.3
