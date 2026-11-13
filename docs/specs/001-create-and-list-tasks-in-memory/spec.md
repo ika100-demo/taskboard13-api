@@ -1,7 +1,7 @@
 ---
 spec_id: 001-create-and-list-tasks-in-memory
 title: Create and list tasks (in memory)
-status: approved
+status: building
 priority: P1
 shape: service-python
 ---
@@ -58,3 +58,4 @@ None.
 
 - 2026-11-13 created
 - 2026-11-13 approved
+- 2026-11-13 building
