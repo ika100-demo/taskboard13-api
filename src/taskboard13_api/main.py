@@ -13,6 +13,7 @@ from pydantic import BaseModel
 from . import __version__
 from .logging_config import configure_logging
 from .metrics import MetricsMiddleware
+from .tasks.api import router as tasks_router
 from .tracing import configure_tracing, tracing_enabled
 
 configure_logging(level=os.environ.get("LOG_LEVEL", "INFO"))
@@ -23,6 +24,7 @@ app = FastAPI(title="taskboard13-api", version=__version__)
 app.add_middleware(MetricsMiddleware)
 if tracing_enabled():
     FastAPIInstrumentor.instrument_app(app)
+app.include_router(tasks_router)
 
 
 class HealthResponse(BaseModel):
