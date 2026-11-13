@@ -56,3 +56,9 @@ def test_smoke_ac_001_3_list_is_array(smoke_base_url: str) -> None:  # AC-001.3 
 def test_smoke_ac_002_5_ready_reaches_database(smoke_base_url: str) -> None:  # AC-002.5 read-only
     response = httpx.get(smoke_base_url + "/ready", timeout=10)
     assert response.status_code == 200
+    assert response.json() == {"status": "ready"}
+    # Not the 503 error body of an unreachable database, and the same database
+    # answers the task list that /ready vouches for.
+    listing = httpx.get(smoke_base_url + "/tasks", timeout=10)
+    assert listing.status_code == 200
+    assert isinstance(listing.json(), list)
