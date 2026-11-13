@@ -9,6 +9,15 @@ Configuration is read exclusively from environment variables. Defaults below are
 | `PORT` | `8080` | HTTP port the service listens on. |
 | `LOG_LEVEL` | `INFO` | Logging level. One of `DEBUG`, `INFO`, `WARNING`, `ERROR`. |
 
+## Database
+
+| Variable | Default | Description |
+|---|---|---|
+| `DATABASE_URL` | _(none)_ | Postgres connection URL; injected by the system's `postgres` resource. |
+| `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD` | _(libpq defaults)_ | Used by libpq when `DATABASE_URL` is unset. |
+
+Timeouts are fixed: API requests use connect 3 s and statement 5 s; `/ready` uses connect 2 s and statement 2 s.
+
 ## Observability
 
 | Variable | Default | Description |
