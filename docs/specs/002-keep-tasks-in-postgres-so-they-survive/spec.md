@@ -1,7 +1,7 @@
 ---
 spec_id: 002-keep-tasks-in-postgres-so-they-survive
 title: Keep tasks in Postgres so they survive restarts, and answer 503 while the database is unreachable
-status: building
+status: done
 priority: P1
 shape: service-python
 parent: ika100-demo/taskboard13-gitops:001-persistent-tasks-in-postgres-with-a-web
@@ -95,3 +95,4 @@ A request body that fails validation still answers 422 even while the database i
 - 2026-11-13 created from the system plan, with its criteria (spec 147)
 - 2026-11-13 approved
 - 2026-11-13 building
+- 2026-11-13 done
