@@ -10,6 +10,7 @@ tasks:
     covers: [AC-002.1, AC-002.2, AC-002.4]
     parallel_safe: true
     depends_on: []
+    done: true
   - id: t2
     title: 503 and 500 error handlers, migrate at start-up, database-aware /ready
     files: [src/taskboard13_api/main.py, tests/test_health.py]
